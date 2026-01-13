@@ -3,19 +3,12 @@ name: trivy tests
 on:
   push:
 
-jobs:
-  trivy-scan:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Install Trivy
-        uses: aquasecurity/trivy-action@0.24.0
-
-      - name: Clear cache
-        run: trivy clean --all
-
-      - name: Download DB
-        run: trivy db download
-
-      - name: Scan nginx image
-        run: trivy image --severity HIGH,CRITICAL nginx:latest
+    trivy-scan:
+      stage: test
+      image:
+        name: docker.io/aquasec/trivy:latest
+        entrypoint: [""]
+      script:
+        - trivy image --clear-cache
+        - trivy image --download-db-only
+        - trivy image --severity HIGH,CRITICAL nginx:latest
