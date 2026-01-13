@@ -8,17 +8,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Install Trivy
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@0.24.0
 
-      - name: Clear Trivy cache
-        run: trivy image --clear-cache
+      - name: Clear cache
+        run: trivy clean --all
 
-      - name: Download Trivy DB
-        run: trivy image --download-db-only
+      - name: Download DB
+        run: trivy db download
 
       - name: Scan nginx image
         run: trivy image --severity HIGH,CRITICAL nginx:latest
