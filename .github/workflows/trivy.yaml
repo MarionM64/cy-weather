@@ -1,0 +1,24 @@
+name: trivy tests
+
+on:
+  push:
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Trivy
+        uses: aquasecurity/trivy-action@0.20.0
+
+      - name: Clear Trivy cache
+        run: trivy image --clear-cache
+
+      - name: Download Trivy DB
+        run: trivy image --download-db-only
+
+      - name: Scan nginx image
+        run: trivy image --severity HIGH,CRITICAL nginx:latest
